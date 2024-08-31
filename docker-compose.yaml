@@ -1,0 +1,77 @@
+services:
+  app:
+    container_name: laraverb
+    image: laraverb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www/laraverb
+    environment:
+      - DB_HOST=db
+      - DB_PORT=db:3308
+      - DB_DATABASE=db_test
+      - DB_USERNAME=root
+      - DB_PASSWORD=bimaarya123
+    volumes:
+      - .:/var/www/laraverb
+      - ./storage/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - laraverb_network
+    ports:
+      - "5173:5173"
+    depends_on:
+      - db
+
+  webserver:
+    container_name: webserver
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/laraverb
+      - ./storage/:/etc/nginx/conf.d/
+    networks:
+      - laraverb_network
+    depends_on:
+      - app
+
+  db:
+    container_name: db
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=bimaarya123
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=bimaarya123
+      - MYSQL_DATABASE=db_test
+    ports:
+      - "3308:3306"
+    volumes:
+      - laraverb_db:/var/lib/mysql
+    networks:
+      - laraverb_network
+
+  phpmyadmin:
+    container_name: pma_laraverb
+    image: phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=bimaarya123
+      - PMA_PORT=db:3308
+    ports:
+      - "8001:80"
+    networks:
+      - laraverb_network
+    depends_on:
+      - webserver
+
+networks:
+  laraverb_network:
+    driver: bridge
+
+volumes:
+  laraverb_db:
