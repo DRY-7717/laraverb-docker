@@ -14,6 +14,9 @@ services:
       - DB_DATABASE=db_test
       - DB_USERNAME=root
       - DB_PASSWORD=bimaarya123
+      - REVERB_APP_ID=717711
+      - REVERB_APP_KEY=pft0vybvji1f58wobvlp
+      - REVERB_APP_SECRET=vgzgqeibj43xzlsphca8
     volumes:
       - .:/var/www/laraverb
       - ./storage/php.ini:/usr/local/etc/php/conf.d/local.ini
@@ -21,6 +24,7 @@ services:
       - laraverb_network
     ports:
       - "5173:5173"
+      - "8080:8080"
     depends_on:
       - db
 
