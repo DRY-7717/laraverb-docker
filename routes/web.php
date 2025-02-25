@@ -6,6 +6,7 @@ use App\Events\OrderDispatched;
 use App\Http\Controllers\ProfileController;
 use App\Models\Message;
 use App\Models\Order;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -13,10 +14,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/orders/{order}', function (Order $order) {
+    return view('order', [
+        'order' => $order
+    ]);
+})->middleware(['auth', 'verified'])->name('orders');
+
+
+Route::get('/rooms/{room}', function (Room $room) {
+    return view('room', [
+        'room' => $room
+    ]);
+})->middleware(['auth', 'verified'])->name('rooms');
+
+
+
+
+
 Route::get('/broadcast', function () {
-    broadcast(new OrderDispatched(User::find(2), Order::find(1)));
+    broadcast(new OrderDispatched(Order::find(1)));
     sleep(5);
-    broadcast(new OrderDelivered(User::find(2), Order::find(1)));
+    broadcast(new OrderDelivered(Order::find(1)));
 });
 
 Route::get('/dashboard', function () {
