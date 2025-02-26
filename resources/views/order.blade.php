@@ -20,24 +20,20 @@
                 }" x-init="Echo.private('orders.{{ $order->id }}')
                     .listen('OrderDispatched', (event) => {
                         proses = true
-                        nameUser = event.user.name
                         order = event.order
                     })
                     .listen('OrderDelivered', (event) => {
                         kirim = true
-                        nameUser = event.user.name
                         order = event.order
                     })">
 
                 
                     <template x-if="proses">
-                        <div>Order (<span x-text="order.id"></span>) has been dispatched to <span
-                                x-text="nameUser"></span></div>
+                        <div>Order (<span x-text="order.id"></span>) has been dispatched</div>
                     </template>
 
                     <template x-if="kirim">
-                        <div>Order (<span x-text="order.id"></span>) has been delivered to <span
-                                x-text="nameUser"></span></div>
+                        <div>Order (<span x-text="order.id"></span>) has been delivered</div>
                     </template>
 
                 </div>
