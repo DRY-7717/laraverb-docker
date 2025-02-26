@@ -32,3 +32,8 @@ Broadcast::channel('room.{roomId}', function ($user, $roomId) {
 
     return $user->only("id", "name");
 });
+
+
+Broadcast::channel('app', function (User $user) {
+    return true;
+});
